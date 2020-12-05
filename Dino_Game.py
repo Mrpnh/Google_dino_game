@@ -10,11 +10,10 @@ pygame.init()
 pygame.mixer.init()
 pygame.mixer.music.load("point.mp3")
 
-#Game variables
+# Screen variables
 
 screenW=1200
 screenH=300
-
 
 # Rendering Text
 
@@ -44,11 +43,9 @@ for i in range(4):
     dino[i]=pygame.transform.scale(dino[i],(80,80))
 
 
-
 # regame loop
 
 def regame(bgfinal,dino_x,dino_y,cactus_x,cactus_y,dino_index,current_cactus):
-    print("Yes")
     restart=False
     while not restart:
         for event in pygame.event.get():
@@ -66,23 +63,24 @@ def regame(bgfinal,dino_x,dino_y,cactus_x,cactus_y,dino_index,current_cactus):
     gameloop()
 
 #gameloop
+
 def gameloop():
     #Gaming variables
     bgfinal=0
-    cactus_x=1300
     bird_x=1300
     bird_y=0     
+    bird_index=0
+    cactus_x=1300
+    cactus_y=140 
     current_cactus=random.choice(cactus)
+    dino_x=90
+    dino_y=160
+    dino_index=0
     score=0
     reset=0
-    bird_index=0
-    dino_index=0
-    dino_y=160
     jumpCount=10
     isJump=False
     neg=1
-    dino_x=90
-    cactus_y=140 
     exit_game=False   
     while not exit_game:
         for event in pygame.event.get():
@@ -104,22 +102,31 @@ def gameloop():
         # cactus running
         
         gameWindow.blit(current_cactus,(cactus_x,cactus_y))
-        cactus_x-=7
+        cactus_x-=7 # cactus speed
+
+        # cactus random choice
 
         if cactus_x<0:
             current_cactus=random.choice(cactus)
             cactus_x=1300
 
         # Text on window 
+
         textRender("Score:"+str(score),(0,0,0),20,30,32)
         
+        # score
+
         reset+=1
         if reset==100:
             score+=1
             reset=0
         
+        # bird running
+
         bird_index+=1
         bird_x-=7
+
+        # dino jumping
 
         if isJump:
             if jumpCount >=-10:
@@ -133,13 +140,18 @@ def gameloop():
                 isJump=False
                 jumpCount=10
                 dino_x=90
+
+        # cactus crash
             
         if dino_x==cactus_x-6:
             break
         
+        # bird crash
+
         if dino_y==bird_y and dino_x==bird_x-6:
            break
 
+        # bird show
         if score>10:
             gameWindow.blit(bird[bird_index%2],(bird_x,bird_y))
         
@@ -156,7 +168,7 @@ def gameloop():
 
     regame(bgfinal,dino_x,dino_y,cactus_x,cactus_y,dino_index,current_cactus)
 
-
+# main function
 
 if __name__ == '__main__':
     gameloop()
